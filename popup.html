@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SimpleVerifier</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header class="bar">
+      <span class="brand">
+        <img src="icons/icon32.png" width="20" height="20" alt="" />
+        SimpleVerifier
+      </span>
+      <span id="plan-chip" class="chip" hidden></span>
+    </header>
+
+    <div id="account-line" class="account" role="status" aria-live="polite">
+      <span id="account-text" class="muted">Checking your account…</span>
+      <span class="row tight">
+        <button type="button" class="btn small primary" id="sign-in-btn" hidden>Sign in with Google</button>
+        <button type="button" class="link" id="key-open" hidden>Use an API key</button>
+        <button type="button" class="link" id="key-remove" hidden>Remove key</button>
+      </span>
+    </div>
+
+    <form id="key-form" class="keyform" novalidate hidden>
+      <label for="key-input" class="sr-only">SimpleVerifier API key</label>
+      <div class="row tight">
+        <input id="key-input" type="password" autocomplete="off" spellcheck="false" placeholder="Paste your SimpleVerifier API key" />
+        <button type="submit" class="btn small primary" id="key-save">Connect</button>
+        <button type="button" class="btn small ghost" id="key-cancel">Cancel</button>
+      </div>
+      <p class="fine">API keys come with Pro, Business and Agency plans. Live checks then count as API calls on your plan. <button type="button" class="link" id="key-where">Find your key</button></p>
+      <p id="key-msg" class="msg" role="status" aria-live="polite"></p>
+    </form>
+
+    <main class="view">
+      <div class="tabs" role="tablist" aria-label="Mode">
+        <button type="button" role="tab" id="tab-page" aria-controls="panel-page" aria-selected="true">This page</button>
+        <button type="button" role="tab" id="tab-one" aria-controls="panel-one" aria-selected="false" tabindex="-1">Check one</button>
+      </div>
+
+      <section id="panel-page" role="tabpanel" aria-labelledby="tab-page">
+        <div id="domain-card" class="card" hidden>
+          <div class="card-head">
+            <span class="label">Email setup for</span>
+            <span id="domain-name" class="mono"></span>
+          </div>
+          <div id="domain-body" class="domain-body muted">Looking up public DNS…</div>
+        </div>
+
+        <button type="button" class="btn primary wide" id="scan-btn">Find emails and phone numbers on this page</button>
+        <p id="scan-msg" class="msg" role="status" aria-live="polite"></p>
+
+        <div id="emails-block" hidden>
+          <div class="section-head">
+            <h2>Emails <span class="count" id="email-count"></span></h2>
+            <div class="row tight">
+              <button type="button" class="btn small primary" id="verify-all">Verify all</button>
+              <button type="button" class="btn small ghost" id="stop-btn" hidden>Stop</button>
+            </div>
+          </div>
+          <p class="fine">Badges come from free in-browser checks (syntax, typos, disposable and role addresses). Verify runs a live mailbox check.</p>
+          <p id="quota-note" class="note" hidden></p>
+          <ul id="email-list" class="list"></ul>
+          <div class="row tight wrap">
+            <button type="button" class="btn small ghost" id="copy-emails">Copy</button>
+            <button type="button" class="btn small ghost" id="csv-emails">Export CSV</button>
+            <button type="button" class="btn small ghost" id="report-btn">Send to a full list report</button>
+          </div>
+        </div>
+
+        <div id="phones-block" hidden>
+          <div class="section-head">
+            <h2>Phone numbers <span class="count" id="phone-count"></span></h2>
+            <div class="row tight">
+              <label for="country" class="sr-only">Default country</label>
+              <select id="country" title="Country for numbers written without +"></select>
+            </div>
+          </div>
+          <p class="fine">Format check only: whether each number fits its country's numbering plan, with its country and line type. It doesn't tell you if a number is in service.</p>
+          <ul id="phone-list" class="list"></ul>
+          <div class="row tight">
+            <button type="button" class="btn small ghost" id="copy-phones">Copy</button>
+            <button type="button" class="btn small ghost" id="csv-phones">Export CSV</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="panel-one" role="tabpanel" aria-labelledby="tab-one" hidden>
+        <form id="one-form" class="stack" novalidate>
+          <label for="one-input" class="sr-only">Email address or phone number</label>
+          <div class="row">
+            <input id="one-input" type="text" autocomplete="off" spellcheck="false" placeholder="jane@company.com or +1 555 123 4567" />
+            <button type="submit" class="btn primary" id="one-btn">Check</button>
+          </div>
+          <p class="fine">Tip: select an email on any page, right-click it and choose Verify with SimpleVerifier.</p>
+        </form>
+        <div id="one-result" class="result" role="status" aria-live="polite"></div>
+      </section>
+
+      <div id="limit-card" class="card upsell" hidden>
+        <p id="limit-text"></p>
+        <div class="row tight wrap">
+          <button type="button" class="btn small primary" id="limit-pro">See plans</button>
+          <button type="button" class="btn small ghost" id="limit-report">Full list report</button>
+        </div>
+      </div>
+    </main>
+
+    <footer class="foot">
+      <div id="rate-line" class="rate" hidden>
+        <button type="button" class="link" id="rate-btn">Enjoying it? Rate us</button>
+        <button type="button" class="icon-btn" id="rate-dismiss" aria-label="Dismiss" title="Dismiss">×</button>
+      </div>
+      <div class="foot-row">
+        <a id="privacy-link" href="#" target="_blank" rel="noopener">Privacy</a>
+        <span aria-hidden="true">·</span>
+        <label class="toggle"><input type="checkbox" id="telemetry-toggle" /> Anonymous usage stats</label>
+      </div>
+    </footer>
+
+    <script type="module" src="popup.js"></script>
+  </body>
+</html>
